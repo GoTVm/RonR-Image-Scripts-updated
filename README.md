@@ -1,10 +1,8 @@
-# RonR-RaspberryPi-image-utils
+#  IMPORTANT INFO
+These scripts DO NOT WORK outside of Raspbian on a Raspberry. They MIGHT work for Ubuntu on Raspberry, but there is no guarantee.
+Ubuntu version (simple installation only) in coming??
 
-**NB** scruss is *not* the author or maintainer of these files (same goes for seamusdemora, who assumed maintenance of this repo from scruss). Please take up any issues or questions in the [Image File Utilities](https://forums.raspberrypi.com/viewtopic.php?t=332000) thread of the Raspberry Pi Forums site. ***IOW: This is a file repository only; no support is available here.***
-
-Files here are a toolset to create and update a backup of a running RPi OS to a raw image file. The files are copies of those posted on the Raspberry Pi Forums site. The file attachments in that forum don't seem to be persistent (*and are subject to other annoyances imposed by CloudFlare*). Consequently, this repo was created by user scruss and is now maintained by seamus, *to ensure* a current working copy of *`image-utils`* is always available through `git`.
-
-## An Overview
+## Original description
 
 I've used RonR's `image-utils` for several years now, and I've become a big fan. In addition to this README, I've made a couple of [posts on StackExchange re `image-utils`](https://raspberrypi.stackexchange.com/a/109364/83790) as a backup solution. `Image-utils` creates a complete backup of a Raspberry Pi quickly and efficiently; these backups are rendered in the form of an [*"image file"*](https://en.wikipedia.org/wiki/IMG_(file_format)). The **\*.img** format is ideal as a backup because it's a _complete_ backup, it's _portable_, and it can be [_loop-mounted_](https://en.wikipedia.org/wiki/Loop_device). In other words: _If your system or SD card or NVME drive becomes corrupted, it can be restored to operation with minimal effort_. This restoration requires 3 "ingredients", and about 5 minutes:
 
