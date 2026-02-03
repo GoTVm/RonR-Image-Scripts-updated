@@ -377,6 +377,8 @@ if [ "${IMGFILE}" = "" ]; then
     done
   fi
   if [ -f "${IMGFILE}" ]; then
+    echo
+    echo "Deleting existing image..."
     rm "${IMGFILE}"
     if [ $? -ne 0 ]; then
       errexit "Unable to delete existing image file"
@@ -411,6 +413,15 @@ y
 EOF
   fi
   mkloop
+
+  echo
+  echo "============================================================"
+  echo " Image file created and partitioned successfully"
+  echo " Formatting partitions (boot + rootfs)..."
+  echo " This may take a while..."
+  echo "============================================================"
+  echo
+
   mkfs.vfat -F 32 -n boot -s 4 "${LOOP}p1" &> /dev/null
   if [ $? -ne 0 ]; then
     errexit "Unable to create image BOOT filesystem"
