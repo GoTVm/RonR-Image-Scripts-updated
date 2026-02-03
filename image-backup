@@ -422,7 +422,7 @@ EOF
   if [ "${ROOT_TYPE}" = "f2fs" ]; then
     mkfs.f2fs "${LOOP}p2" > /dev/null
   else
-    mkfs.ext4 -b 4096 -L rootfs -v "${LOOP}p2" > /dev/null
+    mkfs.ext4 -b 4096 -L rootfs -v "${LOOP}p2"
   fi
   if [ $? -ne 0 ]; then
     errexit "Unable to create image ROOT filesystem"
