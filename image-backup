@@ -235,10 +235,22 @@ if [[ "${ROOT_DEV}" =~ ^/dev/mmcblk[0-9]p$ || "${ROOT_DEV}" =~ ^/dev/nvme[0-9]n1
   ROOT_DEV="${ROOT_DEV:0:(${#ROOT_DEV} - 1)}"
 fi
 ROOT_TYPE=$(blkid "${ROOT_PART}" | sed -n 's|^.*TYPE="\(\S\+\)".*|\1|p')
-PTTYPE=$(parted -s "${ROOT_DEV}" print | awk 'NR==2 {print $6}')
-if [[ "${PTTYPE}" != "dos" && "${PTTYPE}" != "gpt" ]]; then
-  errexit "Unsupported partition table type: ${PTTYPE}"
+if [ -b "${ROOT_DEV}" ]; then
+    # real block device
+    PTTYPE=$(parted -s "${ROOT_DEV}" print | awk 'NR==2 {print $6}')
+elif [ -f "${IMGFILE}" ]; then
+    # working on image file
+    LOOP="$(losetup -f --show "${IMGFILE}")"
+    PTTYPE=$(parted -s "${LOOP}" print | awk 'NR==2 {print $6}')
+    losetup -d "${LOOP}"
+else
+    errexit "Cannot detect partition table type: ${ROOT_DEV} missing"
 fi
+
+if [[ "${PTTYPE}" != "dos" && "${PTTYPE}" != "gpt" ]]; then
+    errexit "Unsupported partition table type: ${PTTYPE}"
+fi
+
 PARTUUID_B="$(blkid "${ROOT_DEV_P}1" | sed -n 's|^.*PARTUUID="\(\S\+\)".*|\1|p')"
 PARTUUID_R="$(blkid "${ROOT_PART}" | sed -n 's|^.*PARTUUID="\(\S\+\)".*|\1|p')"
 PTUUID="$(blkid "${ROOT_DEV}" | sed -n 's|^.*PTUUID="\(\S\+\)".*|\1|p')"
