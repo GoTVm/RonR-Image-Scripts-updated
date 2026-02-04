@@ -235,7 +235,7 @@ if [[ "${ROOT_DEV}" =~ ^/dev/mmcblk[0-9]p$ || "${ROOT_DEV}" =~ ^/dev/nvme[0-9]n1
   ROOT_DEV="${ROOT_DEV:0:(${#ROOT_DEV} - 1)}"
 fi
 ROOT_TYPE=$(blkid "${ROOT_PART}" | sed -n 's|^.*TYPE="\(\S\+\)".*|\1|p')
-PTTYPE="$(blkid "${ROOT_DEV}" | sed -n 's|^.*PTTYPE="\(\S\+\)".*|\1|p')"
+PTTYPE=$(parted -s "${ROOT_DEV}" print | awk 'NR==2 {print $6}')
 if [[ "${PTTYPE}" != "dos" && "${PTTYPE}" != "gpt" ]]; then
   errexit "Unsupported partition table type: ${PTTYPE}"
 fi
