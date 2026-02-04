@@ -132,7 +132,7 @@ if [[ "${ROOT_DEV}" =~ ^/dev/mmcblk[0-9]p$ || "${ROOT_DEV}" =~ ^/dev/nvme[0-9]n1
   ROOT_DEV="${ROOT_DEV:0:(${#ROOT_DEV} - 1)}"
 fi
 START=$(sfdisk -d "${ROOT_DEV}" | sed -n "s|^${ROOT_PART}\s\+:.*start=\s*\([0-9]\+\).*$|\1|p")
-PTTYPE=$(parted -s "${ROOT_DEV}" print | awk 'NR==2 {print $6}')
+PTTYPE="$(blkid "${ROOT_DEV}" | sed -n 's|^.*PTTYPE="\(\S\+\)".*|\1|p')"
 if [ "${PTTYPE}" = "dos" ]; then
   sfdisk --delete "${ROOT_DEV}" 2 > /dev/null
   echo "${START},+" | sfdisk --no-reread --no-tell-kernel -N2 "${ROOT_DEV}" &> /dev/null
